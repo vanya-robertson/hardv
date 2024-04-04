@@ -227,6 +227,11 @@ is earlier than or within today will be quizzed.
 Quiz cards within a file in a random order.
 
 .TP
+\fB-v
+Quiz cards within a file in reverse order.
+Useful for practicing mind palaces.
+
+.TP
 \fB-n \fIn\fR
 Quiz at most \fIn\fR cards.
 
