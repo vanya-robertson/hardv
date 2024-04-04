@@ -34,6 +34,7 @@
 struct opt {
 	int exact;
 	int rand;
+	int rev;
 	int maxn;
 };
 
@@ -94,13 +95,16 @@ int main(int argc, char **argv)
 		time(&now);
 	memset(&opt, 0, sizeof opt);
 	opt.maxn = -1;
-	while ((ch = getopt(argc, argv, "ern:")) != -1)
+	while ((ch = getopt(argc, argv, "ervn:")) != -1)
 		switch (ch) {
 		case 'e':
 			opt.exact = 1;
 			break;
 		case 'r':
 			opt.rand = 1;
+			break;
+		case 'v':
+			opt.rev = 1;
 			break;
 		case 'n':
 			if ((opt.maxn = atoi(optarg)) <= 0)
@@ -130,6 +134,7 @@ void help(void)
 	puts("Options:");
 	puts("	-e	enable exact quiz time");
 	puts("	-r	randomize the quiz order within a file");
+	puts("	-v	reverse the quiz order within a file");
 	puts("	-n N	quiz at most N cards");
 	puts("	--help	print the brief help");
 	puts("	--version");
@@ -195,7 +200,11 @@ void learn(char *fn, time_t now, struct opt *opt)
 	if (opt->rand)
 		shuf(plan, np);
 	for (i = 0; opt->maxn && i < np; i++) {
-		card = plan[i];
+		if (opt->rev) {
+		  card = plan[np - i - 1];
+		} else {
+		  card = plan[i];
+		}
 		if (getv(card, MOD))
 			dirty = modquiz(card, now, card1);
 		else
