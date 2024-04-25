@@ -38,6 +38,8 @@ struct opt {
 	int maxn;
 };
 
+static int dry;
+
 struct field {
 	char *key;
 	char *val;
@@ -99,7 +101,7 @@ int main(int argc, char **argv)
 		time(&now);
 	memset(&opt, 0, sizeof opt);
 	opt.maxn = -1;
-	while ((ch = getopt(argc, argv, "ervn:")) != -1)
+	while ((ch = getopt(argc, argv, "ervdn:")) != -1)
 		switch (ch) {
 		case 'e':
 			opt.exact = 1;
@@ -109,6 +111,9 @@ int main(int argc, char **argv)
 			break;
 		case 'v':
 			opt.rev = 1;
+			break;
+		case 'd':
+			dry = 1;
 			break;
 		case 'n':
 			if ((opt.maxn = atoi(optarg)) <= 0)
@@ -154,6 +159,7 @@ void help(void)
 	puts("	-e	enable exact quiz time");
 	puts("	-r	randomize the quiz order");
 	puts("	-v	reverse the quiz order within a file");
+	puts("	-d	dry-run: ignore date fields and do not write to them");
 	puts("	-n N	quiz at most N cards");
 	puts("	--help	print the brief help");
 	puts("	--version");
@@ -387,20 +393,24 @@ int modquiz(struct card *card, time_t now, int card1)
 
 void sety(struct card *card, time_t now)
 {
-	char buf[VALSZ];
-	time_t diff;
+	if (dry != 1) {
+		char buf[VALSZ];
+		time_t diff;
 
-	diff = getdiff(card, now);
-	setv(card, PREV, timev(now, buf, VALSZ));
-	setv(card, NEXT, timev(now + 2 * diff, buf, VALSZ));
+		diff = getdiff(card, now);
+		setv(card, PREV, timev(now, buf, VALSZ));
+		setv(card, NEXT, timev(now + 2 * diff, buf, VALSZ));
+	}
 }
 
 void setn(struct card *card, time_t now)
 {
-	char buf[VALSZ];
+	if (dry != 1) {
+		char buf[VALSZ];
 
-	setv(card, PREV, timev(now, buf, VALSZ));
-	setv(card, NEXT, timev(now + DAY, buf, VALSZ));
+		setv(card, PREV, timev(now, buf, VALSZ));
+		setv(card, NEXT, timev(now + DAY, buf, VALSZ));
+	}
 }
 
 int loadcard(char *fn, FILE *fp, int *lineno, struct card *card)
@@ -563,6 +573,9 @@ int isnow(struct card *card, time_t now, int exact)
 	struct tm today, theday;
 	time_t next;
 
+	if (dry == 1) {
+		return 1;
+	}
 	next = tmparse(getv(card, NEXT));
 	if (next <= 0)
 		next = now;

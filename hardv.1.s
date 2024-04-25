@@ -231,6 +231,10 @@ Quiz cards in a random order.
 Quiz cards within a file in reverse order.
 
 .TP
+\fB-d
+"Dry-run"; disregard the due dates and do not modify them.
+
+.TP
 \fB-n \fIn\fR
 Quiz at most \fIn\fR cards.
 
