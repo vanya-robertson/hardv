@@ -13,6 +13,7 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <time.h>
+#include <cmark.h>
 #define KCHAR	"abcdefghijklmnopqrstuvwxyz" \
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZ" \
 		"0123456789_"
@@ -279,6 +280,16 @@ char *swapname(char *sn, char *fn, int n)
 	return sn;
 }
 
+//// Dummy callbacks (we only care about text)
+//static void enter_leave_callback(MD_BLOCKTYPE type, void *detail, void *userdata) {
+//    (void)type; (void)detail; (void)userdata;
+//}
+//
+//// Parse and print Markdown content
+//void render_markdown(const char* markdown) {
+//    md_parse(markdown, strlen(markdown), NULL, enter_leave_callback);
+//}
+
 int stdquiz(struct card *card, time_t now, int card1)
 {
 	char in[LINESZ], ques[VALSZ], answ[VALSZ];
@@ -303,7 +314,18 @@ int stdquiz(struct card *card, time_t now, int card1)
 		}
 	} while (strcmp(in, "\n"));
 	puts("A:\n");
+//	cmark_node *root = cmark_parse_document(answ, strlen(answ), CMARK_OPT_DEFAULT);
+//	pindent(cmark_render_commonmark(root, CMARK_OPT_DEFAULT, 80));
 	pindent(answ);
+//	FILE *f;
+//	f = popen ("glow", "w");
+//	if (!f)
+//	{
+//	    perror ("popen");
+//	    exit(1);
+//	}
+//	fprintf(f, "%s", answ);
+//	pclose (f);
 	puts("\n");
 	fflush(stdout);
 	do {
