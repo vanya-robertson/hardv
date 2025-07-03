@@ -187,5 +187,9 @@ learn(void)
 			plan[nq++] = i;
 	if (opt.rand) shuf(plan, nq);
 	if (opt.maxn>0 && nq>opt.maxn) nq = opt.maxn;
-	for (i=0; i<nq; i++) quiz(&ctab[plan[i]]);
+	if (opt.rev) {
+		for (i=0; i<nq; i++) quiz(&ctab[plan[nq-i-1]]);
+	} else {
+		for (i=0; i<nq; i++) quiz(&ctab[plan[i]]);
+	}
 }

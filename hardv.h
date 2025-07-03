@@ -9,6 +9,7 @@
 struct option {
 	int exact;
 	int rand;
+	int rev;
 	int maxn;
 };
 
