@@ -19,6 +19,7 @@ help(void)
 	puts("	-e	enable exact quiz time");
 	puts("	-r	randomize the quiz order");
 	puts("	-v	reverse the quiz order within a file");
+	puts("	-d	dry-run: ignore date fields and do not write to them");
 	puts("	-n N	quiz at most N cards");
 	puts("	--help	print the brief help");
 	puts("	--version");
@@ -47,7 +48,7 @@ main(int argc, char **argv)
 	srand(time(NULL));
 	if (argc>1 && !strcmp(argv[1], "--help")) help();
 	if (argc>1 && !strcmp(argv[1], "--version")) version();
-	while ((ch=getopt(argc,argv,"ervn:")) != -1)
+	while ((ch=getopt(argc,argv,"ervdn:")) != -1)
 		switch (ch) {
 		case 'e':
 			opt.exact = 1;
@@ -57,6 +58,9 @@ main(int argc, char **argv)
 			break;
 		case 'v':
 			opt.rev = 1;
+			break;
+		case 'd':
+			opt.dry = 1;
 			break;
 		case 'n':
 			opt.maxn = atoi(optarg);

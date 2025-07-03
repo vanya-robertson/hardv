@@ -59,6 +59,7 @@ issameday(time_t a, time_t b)
 static int
 isnow(struct card *card)
 {
+	if (opt.dry == 1) return 1;
 	time_t should;
 
 	should = elapsecs(getv(card, NEXT));
@@ -133,6 +134,7 @@ settime(struct card *card, char *k, time_t v)
 static void
 sety(struct card *card)
 {
+	if (opt.dry == 1) return;
 	time_t prev, next, diff;
 
 	prev = getv(card,PREV)?elapsecs(getv(card,PREV)):now;
@@ -147,6 +149,7 @@ sety(struct card *card)
 static void
 setn(struct card *card)
 {
+	if (opt.dry == 1) return;
 	settime(card, PREV, now);
 	settime(card, NEXT, now+86400);
 	ctabdump(card->file);

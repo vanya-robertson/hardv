@@ -11,6 +11,7 @@ struct option {
 	int rand;
 	int rev;
 	int maxn;
+	int dry;
 };
 
 struct field {
