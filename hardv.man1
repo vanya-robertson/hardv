@@ -225,9 +225,9 @@ is earlier than or within today will be quizzed.
 \fB-r
 Quiz cards in a random order.
 
-+.TP
-+\fB-v
-+Quiz cards within a file in reverse order.
+.TP
+\fB-v
+Quiz cards within a file in reverse order.
 
 .TP
 \fB-n \fIn\fR
